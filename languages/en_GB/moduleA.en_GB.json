@@ -1,0 +1,5 @@
+{
+  "m_user_name_label" : "User name",
+  "m_user_name" : "Enter your user name!",
+  "hello_user_name" : "Hello, %s %s year old"
+}
