@@ -33,9 +33,12 @@ i18n.init({current_lang: 'en_GB', default_lang : 'en_GB'});
 
 var languageRedisCache = 'LANGUAGE_CACHE_REDIS';
 
-//Change test = your global APP CONFIG
-var test = false;
-if(test == true){
+//Change test = your APP CONFIG
+var config = {
+    env : 'development'
+};
+
+if(config.env == 'development'){
     app.use(function (req, res, next) {
         i18n.add('languages/nl_NL/moduleA.nl_NL.json', 'nl_NL');
         i18n.add('languages/en_GB/moduleA.en_GB.json', 'en_GB');
