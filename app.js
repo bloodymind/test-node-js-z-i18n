@@ -33,22 +33,34 @@ i18n.init({current_lang: 'en_GB', default_lang : 'en_GB'});
 
 var languageRedisCache = 'LANGUAGE_CACHE_REDIS';
 
-redis.get(languageRedisCache, function (error, result) {
-    if (result == null) {
+//Change test = your global APP CONFIG
+var test = false;
+if(test == true){
+    app.use(function (req, res, next) {
         i18n.add('languages/nl_NL/moduleA.nl_NL.json', 'nl_NL');
         i18n.add('languages/en_GB/moduleA.en_GB.json', 'en_GB');
         global.i18n = i18n;
         global._t = i18n.__;
-        //global._ = i18n.__;
+        next();
+    });
+}else{
+    redis.get(languageRedisCache, function (error, result) {
+        if (result == null || test == true) {
+            i18n.add('languages/nl_NL/moduleA.nl_NL.json', 'nl_NL');
+            i18n.add('languages/en_GB/moduleA.en_GB.json', 'en_GB');
+            global.i18n = i18n;
+            global._t = i18n.__;
+            //global._ = i18n.__;
 
-        redis.set(languageRedisCache, JSON.stringify(i18n.getTranslation()), redis.print);
-    } else {
-        i18n.setTranslation(result);
-        global.i18n = i18n;
-        global._t = i18n.__;
-        //global._ = i18n.__;
-    }
-});
+            redis.set(languageRedisCache, JSON.stringify(i18n.getTranslation()), redis.print);
+        } else {
+            i18n.setTranslation(result);
+            global.i18n = i18n;
+            global._t = i18n.__;
+            //global._ = i18n.__;
+        }
+    });
+}
 
 //Use middleware to set current language
 app.use(function (req, res, next) {
